@@ -95,15 +95,6 @@ app.get("/api/writings", authenticateToken, async (req, res) => {
     res.status(500).json({ message: "Server error fetching writings" });
   }
 });
-
-app.get("/api/protected", authenticateToken, (req, res) => {
-  res.json({
-    message: "This is top secret data!",
-    user: req.user,
-    data: [1, 2, 3, 4, 5]
-  });
-});
-
 app.listen(process.env.PORT, () => {
   console.log("Server running");
 });
