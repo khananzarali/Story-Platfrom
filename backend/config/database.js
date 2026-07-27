@@ -41,7 +41,7 @@ app.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign(
-      { user_name: row.user_name },
+      { id: row.id, user_name: row.user_name, role: row.role },
       process.env.JWT_SECRET || "fallback_secret_key",
       { expiresIn: "1h" }
     );
@@ -49,6 +49,8 @@ app.post("/login", async (req, res) => {
     res.json({
       message: "Login successful",
       token: token,
+      role: row.role,
+      user_id: row.id
     });
   } catch (error) {
     console.error(error);
@@ -59,6 +61,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
+// Middleware to authenticate JWT
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -71,6 +74,27 @@ const authenticateToken = (req, res, next) => {
     next();
   });
 };
+
+// Route to fetch stories based on user role
+app.get("/api/writings", authenticateToken, async (req, res) => {
+  try {
+    let result;
+    if (req.user.role === "admin") {
+      // Admin sees everything
+      result = await pool.query("SELECT * FROM stories");
+    } else if (req.user.role === "author") {
+      // Author only sees their own writings
+      result = await pool.query("SELECT * FROM stories WHERE author_id = $1", [req.user.id]);
+    } else {
+      // User sees all writings
+      result = await pool.query("SELECT * FROM stories");
+    }
+    res.json(result.rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error fetching writings" });
+  }
+});
 
 app.get("/api/protected", authenticateToken, (req, res) => {
   res.json({
