@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function DailyBookRecommendation() {
   const [book, setBook] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -16,7 +18,7 @@ function DailyBookRecommendation() {
         let response;
         try {
           // 1. First try fetching from our backend endpoint which uses Redis Cache
-          response = await axios.get("http://localhost:5000/api/recommendations/daily");
+          response = await axios.get(`${API_URL}/api/recommendations/daily`);
           if (response.data && response.data.cached) {
             setIsCached(true);
           }

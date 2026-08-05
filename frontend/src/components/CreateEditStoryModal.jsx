@@ -1,6 +1,8 @@
 import { useState } from "react";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function CreateEditStoryModal({ storyToEdit, onClose, onSuccess }) {
   const [title, setTitle] = useState(storyToEdit ? storyToEdit.title : "");
   const [content, setContent] = useState(storyToEdit ? storyToEdit.content : "");
@@ -35,12 +37,12 @@ function CreateEditStoryModal({ storyToEdit, onClose, onSuccess }) {
 
       if (storyToEdit) {
         // UPDATE existing story
-        await axios.put(`http://localhost:5000/api/writings/${storyToEdit.id}`, payload, {
+        await axios.put(`${API_URL}/api/writings/${storyToEdit.id}`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
       } else {
         // CREATE new story
-        await axios.post("http://localhost:5000/api/writings", payload, {
+        await axios.post(`${API_URL}/api/writings`, payload, {
           headers: { Authorization: `Bearer ${token}` },
         });
       }

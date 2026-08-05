@@ -2,6 +2,8 @@ import { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function Login() {
   const [isSignup, setIsSignup] = useState(false);
   const [username, setUsername] = useState("");
@@ -25,7 +27,7 @@ function Login() {
       setLoading(true);
       setError("");
 
-      const endpoint = isSignup ? "http://localhost:5000/api/signup" : "http://localhost:5000/login";
+      const endpoint = isSignup ? `${API_URL}/api/signup` : `${API_URL}/login`;
       const payload = isSignup
         ? { user_name: userToSubmit, password: passToSubmit, role: selectedRole }
         : { user_name: userToSubmit, password: passToSubmit };

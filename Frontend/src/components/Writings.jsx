@@ -3,6 +3,8 @@ import axios from "axios";
 import StoryReaderModal from "./StoryReaderModal";
 import CreateEditStoryModal from "./CreateEditStoryModal";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function Writings() {
   const [stories, setStories] = useState([]);
   const [error, setError] = useState(null);
@@ -36,7 +38,7 @@ function Writings() {
       if (selectedCategory !== "All") params.append("category", selectedCategory);
 
       const response = await axios.get(
-        `http://localhost:5000/api/writings?${params.toString()}`,
+        `${API_URL}/api/writings?${params.toString()}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -67,7 +69,7 @@ function Writings() {
     if (!token) return;
 
     try {
-      await axios.delete(`http://localhost:5000/api/writings/${id}`, {
+      await axios.delete(`${API_URL}/api/writings/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setStories(stories.filter((s) => s.id !== id));

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 function StoryReaderModal({ story, onClose, onStoryUpdated }) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -18,7 +20,7 @@ function StoryReaderModal({ story, onClose, onStoryUpdated }) {
     // Fetch comments for this story
     const fetchComments = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/writings/${story.id}/comments`, {
+        const res = await axios.get(`${API_URL}/api/writings/${story.id}/comments`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
         setComments(res.data || []);
@@ -33,7 +35,7 @@ function StoryReaderModal({ story, onClose, onStoryUpdated }) {
     const checkLiked = async () => {
       if (!token || !userId) return;
       try {
-        const res = await axios.get(`http://localhost:5000/api/writings/${story.id}/likes/check`, {
+        const res = await axios.get(`${API_URL}/api/writings/${story.id}/likes/check`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (res.data && res.data.liked) {
@@ -56,7 +58,7 @@ function StoryReaderModal({ story, onClose, onStoryUpdated }) {
 
     try {
       const res = await axios.post(
-        `http://localhost:5000/api/writings/${story.id}/likes`,
+        `${API_URL}/api/writings/${story.id}/likes`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -79,7 +81,7 @@ function StoryReaderModal({ story, onClose, onStoryUpdated }) {
     try {
       setSubmittingComment(true);
       const res = await axios.post(
-        `http://localhost:5000/api/writings/${story.id}/comments`,
+        `${API_URL}/api/writings/${story.id}/comments`,
         { content: newComment.trim() },
         { headers: { Authorization: `Bearer ${token}` } }
       );
