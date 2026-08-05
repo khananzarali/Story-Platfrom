@@ -1,0 +1,196 @@
+/* ==========================================================================
+   CHRISTY ANNE JONES COZY LITERARY & BOTANICAL DESIGN SYSTEM
+   Warm Parchment • Botanical Sage • Terracotta • Editorial Serif
+   ========================================================================== */
+
+:root {
+  /* Warm Cozy Palette */
+  --bg-parchment: #faf6f0;
+  --bg-ivory: #fffdf9;
+  --bg-warm-contrast: #f3efe7;
+  --bg-card: #ffffff;
+  
+  /* Literary Ink Typography Colors */
+  --text-ink: #2b2e2c;
+  --text-secondary: #5a635e;
+  --text-muted: #88908b;
+  --text-terracotta: #8e543c;
+
+  /* Botanical & Artisan Accents */
+  --accent-terracotta: #c86d51;
+  --accent-terracotta-hover: #b15a40;
+  --accent-sage: #4e6f5e;
+  --accent-sage-light: rgba(78, 111, 94, 0.12);
+  --accent-honey: #d49a38;
+  --accent-honey-light: rgba(212, 154, 56, 0.14);
+  --accent-terracotta-light: rgba(200, 109, 81, 0.12);
+
+  /* Delicate Borders & Shadows */
+  --border-cozy: rgba(200, 109, 81, 0.16);
+  --border-subtle: rgba(90, 99, 94, 0.15);
+  --shadow-cozy: 0 10px 30px rgba(43, 46, 44, 0.06);
+  --shadow-hover: 0 16px 40px rgba(43, 46, 44, 0.12);
+
+  /* Typography */
+  --font-serif: 'Cormorant Garamond', 'Playfair Display', Georgia, serif;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* Layout */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: var(--bg-parchment);
+  color: var(--text-ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  background-image: radial-gradient(circle at 10% 20%, rgba(212, 154, 56, 0.06) 0%, transparent 60%),
+                    radial-gradient(circle at 90% 80%, rgba(78, 111, 94, 0.05) 0%, transparent 60%);
+  background-attachment: fixed;
+}
+
+/* Classic Literary Typography */
+h1, h2, h3, h4, .serif {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  color: var(--text-ink);
+  letter-spacing: -0.01em;
+}
+
+/* Cozy Parchment Cards (replaces cold glassmorphism) */
+.glass-card, .cozy-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-cozy);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-cozy);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover, .cozy-card:hover {
+  box-shadow: var(--shadow-hover);
+  border-color: rgba(200, 109, 81, 0.3);
+  transform: translateY(-2px);
+}
+
+/* Cozy Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--accent-terracotta);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(200, 109, 81, 0.25);
+  font-family: var(--font-sans);
+}
+
+.btn-primary:hover {
+  background: var(--accent-terracotta-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(200, 109, 81, 0.35);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--bg-card);
+  color: var(--text-ink);
+  padding: 11px 22px;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 1px solid rgba(200, 109, 81, 0.35);
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  font-family: var(--font-sans);
+}
+
+.btn-outline:hover {
+  background: var(--accent-terracotta-light);
+  border-color: var(--accent-terracotta);
+  color: var(--accent-terracotta);
+  transform: translateY(-1px);
+}
+
+/* Cozy Literary Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 13px;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-family: var(--font-sans);
+}
+
+.badge-gold {
+  background: var(--accent-terracotta-light);
+  color: var(--accent-terracotta);
+  border: 1px solid rgba(200, 109, 81, 0.3);
+}
+
+.badge-indigo {
+  background: var(--accent-sage-light);
+  color: var(--accent-sage);
+  border: 1px solid rgba(78, 111, 94, 0.3);
+}
+
+.badge-honey {
+  background: var(--accent-honey-light);
+  color: #b37a1c;
+  border: 1px solid rgba(212, 154, 56, 0.35);
+}
+
+/* Subtle Highlights */
+.glow-text {
+  color: var(--accent-terracotta);
+  font-weight: 600;
+}
+
+/* Smooth Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.45s ease-out forwards;
+}
