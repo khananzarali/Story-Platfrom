@@ -126,24 +126,13 @@ app.post("/login", async (req, res) => {
       return res.status(401).json({ message: "Invalid credentials" });
     }
 
-<<<<<<< Updated upstream
-    const token = jwt.sign(
-      { user_name: row.user_name },
-      process.env.JWT_SECRET || "fallback_secret_key",
-      { expiresIn: "1h" }
-    );
-=======
     const token = generateToken(row);
->>>>>>> Stashed changes
 
     res.json({
       message: "Login successful",
       token: token,
-<<<<<<< Updated upstream
-=======
       role: row.role,
       user_id: row.id,
->>>>>>> Stashed changes
     });
   } catch (error) {
     console.error("Login error:", error);
@@ -151,8 +140,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-<<<<<<< Updated upstream
-=======
 // Signup Endpoint
 app.post("/api/signup", async (req, res) => {
   const { user_name, password, role } = req.body;
@@ -191,7 +178,6 @@ app.post("/api/signup", async (req, res) => {
 });
 
 // --- JWT MIDDLEWARE ---
->>>>>>> Stashed changes
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];
@@ -205,19 +191,7 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
-<<<<<<< Updated upstream
-app.get("/api/protected", authenticateToken, (req, res) => {
-  res.json({
-    message: "This is top secret data!",
-    user: req.user,
-    data: [1, 2, 3, 4, 5]
-  });
-});
 
-app.listen(process.env.PORT, () => {
-  console.log("Server running");
-});
-=======
 // --- EXTERNAL API CACHING ENDPOINT (Google Books API) ---
 // Caches external API data in Redis so only one API request is made and then it is saved
 app.get("/api/recommendations/daily", async (req, res) => {
@@ -490,4 +464,3 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
->>>>>>> Stashed changes
