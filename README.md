@@ -1,118 +1,383 @@
-# ✒️ Ink & Quill — Literary Studio & Publishing Platform
+# 📚 Story Platform - Full-Stack Story Sharing Platform with RBAC
 
-![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
-![Vite](https://img.shields.io/badge/Vite-B73BFE?style=for-the-badge&logo=vite&logoColor=FFD62E)
-![Node.js](https://img.shields.io/badge/Node.js-43853D?style=for-the-badge&logo=node.js&logoColor=white)
-![Express.js](https://img.shields.io/badge/Express.js-404D59?style=for-the-badge)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
-![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=for-the-badge&logo=docker&logoColor=white)
-![JWT](https://img.shields.io/badge/JWT-000000?style=for-the-badge&logo=JSON%20web%20tokens&logoColor=white)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Node.js](https://img.shields.io/badge/Node.js-18+-43853D?style=flat&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![React](https://img.shields.io/badge/React-19-20232A?style=flat&logo=react&logoColor=61DAFB)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-8-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Express](https://img.shields.io/badge/Express-5-000000?style=flat&logo=express&logoColor=white)](https://expressjs.com/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-16+-4169E1?style=flat&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![JWT](https://img.shields.io/badge/JWT-Secure-000000?style=flat&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
 
-**Ink & Quill** is a production-ready, full-stack literary publishing platform built with **React (Vite)**, **Node.js (Express)**, and **PostgreSQL**. It features role-based access control (RBAC), cryptographic JWT authentication, `bcryptjs` password hashing, real-time community discussions, and daily literary discovery powered by the **Google Books API**.
-
----
-
-## 🌟 Key Engineering & Architectural Features
-
-### 1. 🛡️ Cryptographic Security & RBAC
-- **Password Hashing**: User passwords are never stored in plain text. All credentials are salted and hashed using `bcryptjs` (cost factor 10).
-- **Stateless Authentication**: Signed JSON Web Tokens (`HMAC SHA-256`) authenticate requests without server-side session lookup.
-- **Three-Tier Role-Based Access Control (RBAC)**: Enforced at both the database query layer and React router guard layer.
-
-| Feature / Action | 👤 Reader (`user`) | ✒️ Author (`author`) | 🛡️ Admin (`admin`) |
-| :--- | :---: | :---: | :---: |
-| Browse & Search Community Stories | ✅ | ✅ (Own stories) | ✅ (All stories) |
-| Read Daily Curated Book Recommendation | ✅ | ✅ | ✅ |
-| Like / Upvote Stories & Leave Comments | ✅ | ✅ | ✅ |
-| Publish New Stories (`POST /api/writings`) | ❌ | ✅ | ✅ |
-| Edit Existing Stories (`PUT /api/writings/:id`) | ❌ | ✅ (Own only) | ✅ (Any story) |
-| Delete Stories (`DELETE /api/writings/:id`) | ❌ | ✅ (Own only) | ✅ (Any story) |
+A modern, full-stack digital storytelling platform built with React 19, Express 5, and PostgreSQL. Features granular Role-Based Access Control (RBAC), secure JWT authentication, rich story publishing, and responsive reader-friendly interfaces.
 
 ---
 
-### 2. 📖 Relational Data & Interactive Community
-- **Full CRUD for Writings**: Authors and Admins can publish, edit, and delete stories via sleek glassmorphic modals.
-- **Relational SQL Schema**: Includes PostgreSQL foreign keys with `ON DELETE CASCADE` across `users`, `stories`, `comments`, and `likes` tables.
-- **Interactive Story Reader & Comments**: Readers can click **"📖 Read & Discuss"** on any story card to open a distraction-free modal reader with live like counters and real-time comment threads.
+## 📑 Table of Contents
+
+- [✨ Features](#-features)
+- [🏗️ System Architecture](#️-system-architecture)
+- [🛡️ Role-Based Access Control (RBAC)](#️-role-based-access-control-rbac)
+- [🛠️ Tech Stack](#️-tech-stack)
+- [📂 Project Structure](#-project-structure)
+- [🗄️ Database Schema](#️-database-schema)
+- [🔌 API Endpoints](#-api-endpoints)
+- [🚀 Getting Started](#-getting-started)
+  - [Prerequisites](#prerequisites)
+  - [1. Clone the Repository](#1-clone-the-repository)
+  - [2. Backend Setup](#2-backend-setup)
+  - [3. Frontend Setup](#3-frontend-setup)
+- [🧪 Testing the Authentication & Story Flow](#-testing-the-authentication--story-flow)
+- [⚙️ Environment Configuration](#️-environment-configuration)
+- [📜 Available Scripts](#-available-scripts)
+- [🗺️ Roadmap](#️-roadmap)
+- [🤝 Contributing](#-contributing)
+- [📄 License](#-license)
 
 ---
 
-### 3. 🔍 Server-Side Filtering & Live Search
-- Supports debounced real-time title/content searches and genre category filtering (`Literary Fiction`, `Sci-Fi`, `Mystery`, `Poetry`, `Fantasy`).
-- Optimized SQL query execution featuring correlated subqueries for aggregated like and comment counts.
+## ✨ Features
+
+- **🛡️ Granular Role-Based Access Control (RBAC)**: Strict permission hierarchy distinguishing Readers (`user`), Writers (`writer`), and Administrators (`admin`).
+- **🔐 Secure Authentication**: Passwords hashed with `bcryptjs` (salt rounds: 10) and stateless session authorization via signed JSON Web Tokens (JWT).
+- **✍️ Creator Workflow**: Dedicated publishing suite for verified writers to draft, categorize, and publish stories.
+- **📖 Curated Story Feed & Recommendations**: Category filtering (Fiction, Technology, Inspiration, Mystery) and tailored book recommendations.
+- **⚡ High-Performance React 19 Client**: Built on Vite 8 with React Router client-side routing, optimistic state management, and accessible form controls.
+- **💾 PostgreSQL Relational Persistence**: ACID-compliant persistence with connection pooling (`pg.Pool`), foreign key cascade constraints, and automated table provisioning.
+- **🎨 Responsive Design System**: Modern CSS variables architecture with dark/light mode token support, smooth animations, and mobile responsiveness.
 
 ---
 
-### 4. 📚 Google Books API "Book of the Day"
-- Integrated with Google Books' public REST API (`/volumes`).
-- Uses a **deterministic daily seed algorithm** (`dayOfYear % totalItems`), ensuring that every user visiting on a given calendar day sees the exact same featured literary masterpiece.
+## 🏗️ System Architecture
 
----
+The application decouples client rendering from backend business logic and persistence using REST APIs and JWT bearer authorization:
 
-## 🏗️ Architecture Diagram
+```mermaid
+graph TD
+  subgraph Client ["Frontend Client (Port 5173)"]
+    ReactApp["💻 React 19 + Vite 8 App"]
+    Router["🧭 React Router (Routes & Guards)"]
+    Components["🧩 Components (Stories, Writer, Admin, Auth)"]
+    Storage["🔑 LocalStorage (JWT Token & Session)"]
+  end
 
+  subgraph Server ["Backend API (Port 5000)"]
+    Express["🚀 Express.js 5 Application"]
+    AuthMid["🔒 Authentication Middleware (JWT)"]
+    RBACMid["🛡️ Role Authorization Middleware"]
+    Routes["📡 Route Handlers (/auth, /stories, /admin)"]
+  end
+
+  subgraph Database ["Persistence Layer"]
+    Pool["🏊 PostgreSQL Pool Client (pg)"]
+    Postgres[("🗄️ PostgreSQL Database")]
+  end
+
+  ReactApp --> Router
+  Router --> Components
+  Components <--> Storage
+  Components <-->|"REST API Requests (Bearer JWT)"| Express
+  Express --> AuthMid
+  AuthMid --> RBACMid
+  RBACMid --> Routes
+  Routes <--> Pool
+  Pool <--> Postgres
 ```
-       [ Client / Browser ]
-        React 18 • Vite • CSS Glassmorphism
-                 │
-                 │  HTTP REST / JSON
-                 │  Authorization: Bearer <JWT>
-                 ▼
-       [ Express.js API Gateway ]
-        JWT Middleware • Bcrypt Auth • RBAC Guards
-                 │
-                 │  node-postgres (pg pool)
-                 ▼
-       [ PostgreSQL Database ]
-        Tables: users | stories | comments | likes
+
+---
+
+## 🛡️ Role-Based Access Control (RBAC)
+
+The platform enforces strict permissions at both the backend route level and frontend navigation level:
+
+| Role | Browse & Read Stories | Submit New Stories | Edit Stories | Admin Management |
+| :--- | :---: | :---: | :---: | :---: |
+| **`user` (Reader)** | ✅ Yes | ❌ No | ❌ No | ❌ No |
+| **`writer` (Author)** | ✅ Yes | ✅ Yes | ✅ Yes (Own Stories) | ❌ No |
+| **`admin` (Administrator)** | ✅ Yes | ❌ No | ✅ Yes (All Stories) | ✅ Full Access |
+
+---
+
+## 🛠️ Tech Stack
+
+### Frontend (`frontend/`)
+| Technology | Description |
+| :--- | :--- |
+| **React 19** | Modern component-based declarative UI library |
+| **Vite 8** | Next-generation lightning-fast frontend tooling |
+| **React Router** | Client-side routing and declarative route guards |
+| **Vanilla CSS** | Modern design token system using CSS custom properties |
+| **ESLint** | Code quality analysis and React Hooks verification |
+
+### Backend (`backend/`)
+| Technology | Description |
+| :--- | :--- |
+| **Node.js** | Server-side JavaScript runtime environment |
+| **Express 5** | Minimalist web application framework for REST APIs |
+| **PostgreSQL** | Enterprise-grade open-source relational database |
+| **`pg` (node-postgres)** | PostgreSQL client and connection pooling for Node.js |
+| **JSON Web Token (JWT)** | Stateless, token-based authorization and session verification |
+| **Bcrypt.js** | Cryptographic salted password hashing |
+| **CORS** | Cross-Origin Resource Sharing security configuration |
+| **Dotenv** | Zero-dependency environment variable loader |
+
+---
+
+## 📂 Project Structure
+
+```text
+storyplatformpractice/
+├── backend/                    # Express.js REST API server
+│   ├── config/
+│   │   └── db.js               # PostgreSQL connection pool & table bootstrap
+│   ├── database/
+│   │   └── db.js               # Alternative database & router script
+│   ├── middleware/
+│   │   └── auth.js             # JWT authentication & RBAC authorization middleware
+│   ├── .env.example            # Backend environment variables template
+│   ├── index.js                # Server entry point, middleware & route definitions
+│   └── package.json            # Backend dependencies & npm scripts
+│
+├── frontend/                   # React 19 + Vite client
+│   ├── public/                 # Static assets & icons
+│   ├── src/
+│   │   ├── components/
+│   │   │   ├── About.jsx       # Platform vision & technology description
+│   │   │   ├── Admin.jsx       # Admin management panel
+│   │   │   ├── BookRec.jsx     # Curated reading recommendations
+│   │   │   ├── Home.jsx        # Landing hero & feature showcase
+│   │   │   ├── Login.jsx       # User authentication (Login & Register toggle)
+│   │   │   ├── Navbar.jsx      # Navigation header & active session indicator
+│   │   │   ├── Registration.jsx# Dedicated registration interface
+│   │   │   ├── Stories.jsx     # Story feed & creator publishing view
+│   │   │   └── Writer.jsx      # Writer draft submission workspace
+│   │   ├── App.jsx             # Top-level routing & session management
+│   │   ├── App.css             # Component-level layout & interactive styles
+│   │   ├── index.css           # Global typography, color schemes & themes
+│   │   └── main.jsx            # Application root mounting with React DOM
+│   ├── index.html              # HTML entry point
+│   ├── vite.config.js          # Vite build & plugin configuration
+│   └── package.json            # Frontend dependencies & npm scripts
+│
+├── package.json                # Root workspace scripts (backend & frontend orchestration)
+└── README.md                   # Project documentation
 ```
 
 ---
 
-## 🚀 Quick Start & Local Development
+## 🗄️ Database Schema
 
-### Option A: Using Docker Compose (Recommended)
-Launch the entire stack (PostgreSQL, Node Backend, and React Frontend) in 10 seconds:
+The database model is structured in PostgreSQL with foreign keys and cascade deletions:
+
+```sql
+-- Users Table with Role Attribution
+CREATE TABLE IF NOT EXISTS users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR(100) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  role VARCHAR(50) DEFAULT 'user' CHECK (role IN ('user', 'writer', 'admin')),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Stories Table linked to Author
+CREATE TABLE IF NOT EXISTS stories (
+  id SERIAL PRIMARY KEY,
+  title VARCHAR(255) NOT NULL,
+  content TEXT NOT NULL,
+  category VARCHAR(100) DEFAULT 'General',
+  author_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  author_username VARCHAR(100) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+);
+```
+
+- **`users`**: Stores credentials with bcrypt hash, unique username, and permission role (`user`, `writer`, `admin`).
+- **`stories`**: Contains published story text, categorized tags, creation timestamp, and foreign key reference to the author.
+
+---
+
+## 🔌 API Endpoints
+
+### Authentication Routes
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/register` | Public | Register a new user account with hashed password |
+| `POST` | `/api/auth/login` | Public | Authenticate credentials and return signed JWT token |
+| `GET` | `/api/auth/me` | Authenticated | Retrieve current session profile and role permissions |
+
+### Story Routes & RBAC Guards
+| Method | Endpoint | Access / Role | Description |
+| :--- | :--- | :--- | :--- |
+| `GET` | `/api/stories` | `user`, `admin` | Fetch list of published stories |
+| `GET` | `/api/stories/:id` | `user`, `admin` | Retrieve full details of a specific story |
+| `POST` | `/api/stories` | `writer` only | Publish a new story (author ID tied to JWT) |
+| `PUT` | `/api/stories/:id` | `writer`, `admin` | Update an existing story (writers edit own; admins edit all) |
+| `DELETE` | `/api/stories/:id` | `admin` | Remove a story from the platform |
+
+---
+
+## 🚀 Getting Started
+
+Follow these steps to run the application locally.
+
+### Prerequisites
+
+Ensure you have the following installed on your machine:
+- [Node.js](https://nodejs.org/) (`v18.0.0` or higher)
+- [npm](https://www.npmjs.com/) (`v9.0.0` or higher)
+- [PostgreSQL](https://www.postgresql.org/) (`v14.0.0` or higher)
+- [Git](https://git-scm.com/)
+
+---
+
+### 1. Clone the Repository
+
 ```bash
-docker compose up --build
+git clone https://github.com/khananzarali/storyplatformpractice.git
+cd storyplatformpractice
 ```
-Access the studio at **`http://localhost:5173`**.
 
 ---
 
-### Option B: Manual Local Setup
-1. **Initialize Database Schema & Demo Seed**:
+### 2. Backend Setup
+
+1. Open a terminal and navigate to the `backend` directory:
    ```bash
    cd backend
-   npm install
-   node setup_db.js
    ```
-2. **Start Node.js Backend Server** (`port 5000`):
+
+2. Install backend dependencies:
    ```bash
-   node config/database.js
-   ```
-3. **Start React Frontend Server** (`port 5173`):
-   ```bash
-   cd ../frontend
    npm install
+   ```
+
+3. Configure environment variables:
+   Create a `.env` file in the `backend/` directory based on `.env.example`:
+   ```env
+   PORT=5000
+   JWT_SECRET=your_super_secret_jwt_key_here
+   DB_USER=postgres
+   DB_HOST=localhost
+   DB_NAME=storyplatform
+   DB_PASSWORD=your_postgres_password
+   DB_PORT=5432
+   ```
+
+4. Create the PostgreSQL database:
+   ```sql
+   CREATE DATABASE storyplatform;
+   ```
+
+5. Start the backend server:
+   ```bash
    npm run dev
    ```
 
----
-
-## 🔑 Quick Test Demo Accounts
-
-You can test any role instantly using the **1-Click Quick Demo Accounts** on the login page, or manually sign in with:
-
-| Account Type | Username | Password | Notes |
-| :--- | :--- | :--- | :--- |
-| **Reader** | `user1` | `pass` | Browse stories, add comments, toggle likes |
-| **Author** | `author1` | `pass` | Create stories, edit/delete own writings |
-| **Admin** | `admin1` | `pass` | Full oversight, edit/delete any story |
-
-*You can also create a new account using the **"Create an Account"** button on `/login`!*
+   The server will start listening on `http://localhost:5000`:
+   ```text
+   Database tables verified/initialized successfully.
+   Server is running on http://localhost:5000
+   ```
 
 ---
 
-## 🧪 CI/CD & Testing
-This project includes automated continuous integration workflows in `.github/workflows/test.yml` to validate dependency resolution and production bundle builds on every commit.
+### 3. Frontend Setup
+
+1. Open a second terminal window and navigate to the `frontend` directory:
+   ```bash
+   cd frontend
+   ```
+
+2. Install frontend dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the Vite development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open your browser and navigate to:
+   ```text
+   http://localhost:5173
+   ```
+
+---
+
+## 🧪 Testing the Authentication & Story Flow
+
+To verify Role-Based Access Control and story lifecycle:
+
+1. **Register a Reader Account**:
+   - Go to `http://localhost:5173/login`, select **Register**, and create a standard reader account.
+   - Reader can view stories on `/stories` but will not have access to authoring tools.
+2. **Register a Writer Account**:
+   - Register an account with `role: "writer"`.
+   - Log in and navigate to `/stories` or `/writer` to draft and publish a story.
+   - Verify that the new story instantly appears on the story feed.
+3. **Verify Token Persistence**:
+   - Refresh the page or open a new tab; your JWT authentication token in `localStorage` preserves the session.
+4. **Logout & Session Termination**:
+   - Click the **Logout** button in the navigation header to clear credentials and return to public mode.
+
+---
+
+## ⚙️ Environment Configuration
+
+### Backend (`backend/.env`)
+| Variable | Default | Description |
+| :--- | :--- | :--- |
+| `PORT` | `5000` | Port on which the Express REST API server listens. |
+| `JWT_SECRET` | `story_platform_super_secret_key_2026` | Secret key used to sign and verify JWT tokens. |
+| `DB_HOST` | `localhost` | PostgreSQL host address. |
+| `DB_PORT` | `5432` | PostgreSQL port. |
+| `DB_USER` | `postgres` | Database username. |
+| `DB_PASSWORD` | `postgres` | Database password. |
+| `DB_NAME` | `storyplatform` | Target database name. |
+
+---
+
+## 📜 Available Scripts
+
+### Root Workspace (`package.json`)
+- `npm run backend` — Starts the backend server with hot-reloading (`node --watch`).
+- `npm run frontend` — Starts the Vite frontend development server.
+
+### Backend (`backend/package.json`)
+- `npm start` — Runs the Express server in production mode.
+- `npm run dev` — Runs the Express server with automatic file watching.
+
+### Frontend (`frontend/package.json`)
+- `npm run dev` — Starts the Vite dev server with Hot Module Replacement (HMR).
+- `npm run build` — Compiles optimized production static assets into `dist/`.
+- `npm run preview` — Previews the built production application locally.
+- `npm run lint` — Analyzes JavaScript and JSX files with ESLint.
+
+---
+
+## 🗺️ Roadmap
+
+- [ ] **Rich-Text Markdown Editor**: Integrated WYSIWYG / Markdown editor with live preview for story writers.
+- [ ] **Reader Bookmarks & Likes**: Save favorite stories to personal reading lists with claps/likes.
+- [ ] **Comment & Discussion Threads**: Nested comment section for interactive reader feedback.
+- [ ] **AI-Powered Book Recommendations**: Personalized story recommendations based on reading history.
+- [ ] **Dark & Light Mode Switcher**: Seamless theme toggling with persistent user preference.
+- [ ] **Author Follow & Notifications**: Follow favorite creators and receive alerts for new releases.
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingStoryFeature`)
+3. Commit your Changes (`git commit -m "feat: add AmazingStoryFeature"`)
+4. Push to the Branch (`git push origin feature/AmazingStoryFeature`)
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+Distributed under the **MIT License**. See [`LICENSE`](LICENSE) for more information.
